@@ -56,8 +56,6 @@ ingress:
           pathType: Prefix
   tls:
     - secretName: dozzle-tls
-      hosts:
-        - dozzle.example.com
 
 resources: {}
 

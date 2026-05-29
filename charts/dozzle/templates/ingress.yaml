@@ -15,7 +15,13 @@ spec:
   {{- end }}
   {{- with .Values.ingress.tls }}
   tls:
-    {{- toYaml . | nindent 4 }}
+    {{- range . }}
+    - secretName: {{ .secretName }}
+      hosts:
+        {{- range $.Values.ingress.hosts }}
+        - {{ .host | quote }}
+        {{- end }}
+    {{- end }}
   {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}

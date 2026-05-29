@@ -135,11 +135,6 @@ questions:
         description: "TLS secret name for the Ingress host."
         type: secret
         label: "TLS Secret"
-      - variable: ingress.tls[0].hosts[0]
-        default: "dozzle.example.com"
-        description: "Hostname covered by the TLS certificate."
-        type: hostname
-        label: "TLS Host"
 
   - variable: env.DOZZLE_MODE
     default: "k8s"
