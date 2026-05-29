@@ -50,7 +50,7 @@ ingress:
   className: ""
   annotations: {}
   hosts:
-    - host: dozzle.local
+    - host: dozzle.example.com
       paths:
         - path: /
           pathType: Prefix

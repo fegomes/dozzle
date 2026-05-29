@@ -1,0 +1,193 @@
+questions:
+  - variable: replicaCount
+    default: 1
+    description: "Number of Dozzle replicas to run."
+    type: int
+    required: true
+    label: "Replicas"
+    group: "Deployment"
+
+  - variable: image.repository
+    default: "amir20/dozzle"
+    description: "Dozzle container image repository."
+    type: string
+    required: true
+    label: "Image Repository"
+    group: "Image"
+
+  - variable: image.tag
+    default: "v10.6.2"
+    description: "Dozzle container image tag."
+    type: string
+    required: true
+    label: "Image Tag"
+    group: "Image"
+
+  - variable: image.pullPolicy
+    default: "IfNotPresent"
+    description: "Container image pull policy."
+    type: enum
+    required: true
+    label: "Image Pull Policy"
+    group: "Image"
+    options:
+      - "IfNotPresent"
+      - "Always"
+      - "Never"
+
+  - variable: serviceAccount.create
+    default: true
+    description: "Create a service account for Dozzle."
+    type: boolean
+    required: true
+    label: "Create Service Account"
+    group: "RBAC"
+
+  - variable: serviceAccount.name
+    default: ""
+    description: "Existing service account name. Leave empty to use the generated name."
+    type: string
+    label: "Service Account Name"
+    group: "RBAC"
+
+  - variable: rbac.create
+    default: true
+    description: "Create Kubernetes RBAC resources."
+    type: boolean
+    required: true
+    label: "Create RBAC"
+    group: "RBAC"
+
+  - variable: rbac.clusterWide
+    default: true
+    description: "Use ClusterRole and ClusterRoleBinding to read pods and logs across the cluster."
+    type: boolean
+    required: true
+    label: "Cluster-wide Access"
+    group: "RBAC"
+
+  - variable: service.type
+    default: "ClusterIP"
+    description: "Kubernetes Service type."
+    type: enum
+    required: true
+    label: "Service Type"
+    group: "Service"
+    options:
+      - "ClusterIP"
+      - "NodePort"
+      - "LoadBalancer"
+
+  - variable: service.port
+    default: 8080
+    description: "Service port exposed inside the cluster."
+    type: int
+    required: true
+    label: "Service Port"
+    group: "Service"
+
+  - variable: service.targetPort
+    default: 8080
+    description: "Dozzle container port."
+    type: int
+    required: true
+    label: "Container Port"
+    group: "Service"
+
+  - variable: ingress.enabled
+    default: false
+    description: "Create an Ingress resource for Dozzle."
+    type: boolean
+    required: true
+    label: "Enable Ingress"
+    group: "Ingress"
+    show_subquestion_if: true
+    subquestions:
+      - variable: ingress.className
+        default: ""
+        description: "IngressClass name. Leave empty to use the cluster default."
+        type: string
+        label: "Ingress Class"
+      - variable: ingress.hosts[0].host
+        default: "dozzle.example.com"
+        description: "Hostname used by the Ingress rule."
+        type: hostname
+        required: true
+        label: "Host"
+      - variable: ingress.hosts[0].paths[0].path
+        default: "/"
+        description: "HTTP path exposed by the Ingress."
+        type: string
+        required: true
+        label: "Path"
+      - variable: ingress.hosts[0].paths[0].pathType
+        default: "Prefix"
+        description: "Kubernetes Ingress path type."
+        type: enum
+        required: true
+        label: "Path Type"
+        options:
+          - "Prefix"
+          - "Exact"
+          - "ImplementationSpecific"
+      - variable: ingress.tls[0].secretName
+        default: "dozzle-tls"
+        description: "TLS secret name for the Ingress host."
+        type: secret
+        label: "TLS Secret"
+      - variable: ingress.tls[0].hosts[0]
+        default: "dozzle.example.com"
+        description: "Hostname covered by the TLS certificate."
+        type: hostname
+        label: "TLS Host"
+
+  - variable: env.DOZZLE_MODE
+    default: "k8s"
+    description: "Dozzle runtime mode."
+    type: enum
+    required: true
+    label: "Dozzle Mode"
+    group: "Dozzle"
+    options:
+      - "k8s"
+
+  - variable: env.DOZZLE_LEVEL
+    default: "debug"
+    description: "Dozzle log level."
+    type: enum
+    required: true
+    label: "Log Level"
+    group: "Dozzle"
+    options:
+      - "debug"
+      - "info"
+      - "warn"
+      - "error"
+
+  - variable: resources.requests.cpu
+    default: ""
+    description: "CPU request for the Dozzle container. Example: 100m."
+    type: string
+    label: "CPU Request"
+    group: "Resources"
+
+  - variable: resources.requests.memory
+    default: ""
+    description: "Memory request for the Dozzle container. Example: 128Mi."
+    type: string
+    label: "Memory Request"
+    group: "Resources"
+
+  - variable: resources.limits.cpu
+    default: ""
+    description: "CPU limit for the Dozzle container. Example: 500m."
+    type: string
+    label: "CPU Limit"
+    group: "Resources"
+
+  - variable: resources.limits.memory
+    default: ""
+    description: "Memory limit for the Dozzle container. Example: 512Mi."
+    type: string
+    label: "Memory Limit"
+    group: "Resources"
