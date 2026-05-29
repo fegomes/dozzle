@@ -62,9 +62,30 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.resources }}
+          {{- $limitsCpu := dig "limits" "cpu" "" .Values.resources }}
+          {{- $limitsMemory := dig "limits" "memory" "" .Values.resources }}
+          {{- $requestsCpu := dig "requests" "cpu" "" .Values.resources }}
+          {{- $requestsMemory := dig "requests" "memory" "" .Values.resources }}
+          {{- if or $limitsCpu $limitsMemory $requestsCpu $requestsMemory }}
           resources:
-            {{- toYaml . | nindent 12 }}
+            {{- if or $limitsCpu $limitsMemory }}
+            limits:
+              {{- with $limitsCpu }}
+              cpu: {{ . | quote }}
+              {{- end }}
+              {{- with $limitsMemory }}
+              memory: {{ . | quote }}
+              {{- end }}
+            {{- end }}
+            {{- if or $requestsCpu $requestsMemory }}
+            requests:
+              {{- with $requestsCpu }}
+              cpu: {{ . | quote }}
+              {{- end }}
+              {{- with $requestsMemory }}
+              memory: {{ . | quote }}
+              {{- end }}
+            {{- end }}
           {{- end }}
       {{- with .Values.extraVolumes }}
       volumes:
