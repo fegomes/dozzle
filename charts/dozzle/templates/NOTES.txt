@@ -1,0 +1,17 @@
+Dozzle has been installed.
+
+Release: {{ .Release.Name }}
+Namespace: {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+Ingress hosts:
+{{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
+{{- end }}
+{{- else }}
+Run this command to access Dozzle locally:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "dozzle.fullname" . }} 8080:{{ .Values.service.port }}
+
+Then open:
+  http://127.0.0.1:8080
+{{- end }}

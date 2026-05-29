@@ -1,0 +1,16 @@
+apiVersion: v2
+name: dozzle
+description: A Helm chart for running Dozzle in Kubernetes mode.
+type: application
+version: 0.1.0
+appVersion: "10.6.2"
+home: https://dozzle.dev
+sources:
+  - https://github.com/amir20/dozzle
+maintainers:
+  - name: Dozzle
+keywords:
+  - dozzle
+  - logs
+  - kubernetes
+  - docker

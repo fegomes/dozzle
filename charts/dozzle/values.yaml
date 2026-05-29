@@ -1,0 +1,83 @@
+replicaCount: 1
+
+image:
+  repository: amir20/dozzle
+  pullPolicy: IfNotPresent
+  tag: v10.6.2
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+rbac:
+  create: true
+  clusterWide: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods", "pods/log", "nodes"]
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["metrics.k8s.io"]
+      resources: ["pods"]
+      verbs: ["get", "list"]
+  namespacedRules:
+    - apiGroups: [""]
+      resources: ["pods", "pods/log"]
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["metrics.k8s.io"]
+      resources: ["pods"]
+      verbs: ["get", "list"]
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+  annotations: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: dozzle.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dozzle-tls
+      hosts:
+        - dozzle.example.com
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+strategy:
+  type: RollingUpdate
+
+env:
+  DOZZLE_MODE: k8s
+  DOZZLE_LEVEL: debug
+
+extraEnv: []
+
+extraArgs: []
+
+extraVolumes: []
+
+extraVolumeMounts: []

@@ -1,0 +1,51 @@
+{{- if .Values.rbac.create -}}
+{{- if .Values.rbac.clusterWide }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "dozzle.fullname" . }}
+  labels:
+    {{- include "dozzle.labels" . | nindent 4 }}
+rules:
+  {{- toYaml .Values.rbac.rules | nindent 2 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "dozzle.fullname" . }}
+  labels:
+    {{- include "dozzle.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "dozzle.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "dozzle.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- else }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "dozzle.fullname" . }}
+  labels:
+    {{- include "dozzle.labels" . | nindent 4 }}
+rules:
+  {{- toYaml .Values.rbac.namespacedRules | nindent 2 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "dozzle.fullname" . }}
+  labels:
+    {{- include "dozzle.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "dozzle.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ include "dozzle.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
+{{- end }}
